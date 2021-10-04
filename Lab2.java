@@ -28,57 +28,63 @@ public class Lab2
   System.out.println("            Features: Caesar Cipher and playing with Random Numbers");
   System.out.println("-----------------------------------------------------------------------------");
 
-  try                                                                         //try-catch to handle invalid integer entries
-  {
-    do{                                                                       //using do-while to loop back the processing if the user wishes so
-      System.out.println(" ''''''''''''Caesar Cipher'''''''''''");
-      System.out.print("Enter the text to be encrypted: ");
-      userEntry = entry.nextLine();                                          //User enters the string to be encrypted
-      System.out.print("Enter the value to encrypt the above text: ");
-      userIntEntry = entry.nextInt();                                        //User enters the value to  encrypt the text
-      entry.nextLine();                                                      //clearing scanner input buffer
 
-      userEntry = caesarCipher(userEntry,userIntEntry);                      //calling method to use Caesar Cipher to encrypt text
+    do{
+      try                                                                      //try-catch to handle invalid integer entries
+      {                                                                        //using do-while to loop back the processing if the user wishes so
+        System.out.println(" ''''''''''''Caesar Cipher'''''''''''");
+        System.out.print("Enter the text to be encrypted: ");
+        userEntry = entry.nextLine();                                          //User enters the string to be encrypted
+        System.out.print("Enter the value to encrypt the above text: ");
+        userIntEntry = entry.nextInt();                                        //User enters the value to  encrypt the text
+        entry.nextLine();                                                      //clearing scanner input buffer
 
-      System.out.println("Encrypted text=> " + userEntry);                   //display of encrypted Text
+        userEntry = caesarCipher(userEntry, userIntEntry % 125 + 1);           //calling method to use Caesar Cipher to encrypt text (%125 + 1 used to limit user value)
 
-      System.out.print("Decrypting " + userEntry + " with - " + userIntEntry + " => ");  //Decrypting the encrypted Text
-      userEntry = caesarCipher(userEntry, (26 - (userIntEntry % 26)));                   //same method is called by passing - value of encryption
-      System.out.println(userEntry);                                                     //Decrypted text is displayed here
+        System.out.println("Encrypted text=> " + userEntry);                   //display of encrypted Text
 
-      System.out.println(" ''''''''''''Random Number'''''''''''");
-      System.out.print("Enter the number of Random Values to be generated => ");         //user can decide the number of random values to be generated
-      userIntEntry = entry.nextInt();                                                    // variable userIntEntry is reused as the previous value is not needed anymore
-      entry.nextLine();                                                                  //clearing scanner input buffer
+        System.out.print("Decrypting " + userEntry + " with - " + userIntEntry + " => ");  //Decrypting the encrypted Text
+        userEntry = caesarCipher(userEntry, - (userIntEntry % 125 + 1));                   //same method is called by passing negative value of encryption to decrypt
+        System.out.println(userEntry);                                                     //Decrypted text is displayed here
 
-      randomNumber = new int[userIntEntry];                                              //Instantiating random number array
+        System.out.println(" ''''''''''''Random Number'''''''''''");
+        System.out.print("Enter the number of Random Values to be generated => ");         //user can decide the number of random values to be generated
+        userIntEntry = entry.nextInt();                                                    // variable userIntEntry is reused as the previous value is not needed anymore
+        entry.nextLine();                                                                  //clearing scanner input buffer
 
-      randomNumber = generateRandom(userIntEntry);                                       //calling method to generate the random integers
+        randomNumber = new int[userIntEntry];                                              //Instantiating random number array
 
-      System.out.print("Testing methods with => ");
-      displayArray(randomNumber);                                                        //integer array display method
+        randomNumber = generateRandom(userIntEntry);                                       //calling method to generate the random integers
 
-      avgValue = findingAnswers(randomNumber);                                           //Average is fetched from this method (overloading is used)
-      System.out.println("Average is => " + avgValue);                                   //Average displayed
+        System.out.print("Testing methods with => ");
+        displayArray(randomNumber);                                                        //integer array display method
 
-      System.out.print("Enter the number to search for => ");                            //user to enter the value to be searched
-      userIntEntry = entry.nextInt();                                                    //again variable userIntEntry is reused as the previous value is not needed anymore
-      entry.nextLine();
-      boolean foundIt = findingAnswers(randomNumber, userIntEntry);                      //findingAnswers method is called using method overloading to search the value. This now returns a boolean.
+        avgValue = findingAnswers(randomNumber);                                           //Average is fetched from this method (overloading is used)
+        System.out.println("Average is => " + avgValue);                                   //Average displayed
 
-      if (foundIt == true)                                                               //display of search result
-      {
-        System.out.println("The array contains " + userIntEntry + " :)");
+        System.out.print("Enter the number to search for => ");                            //user to enter the value to be searched
+        userIntEntry = entry.nextInt();                                                    //again variable userIntEntry is reused as the previous value is not needed anymore
+        entry.nextLine();
+        boolean foundIt = findingAnswers(randomNumber, userIntEntry);                      //findingAnswers method is called using method overloading to search the value. This now returns a boolean.
+
+        if (foundIt == true)                                                               //display of search result
+        {
+          System.out.println("The array contains " + userIntEntry + " :)");
+        }
+        else
+        {
+          System.out.println("The array doesn't contains " + userIntEntry + " :(");
+        }
+
+        randomNumber = reverseArray(randomNumber);                                         //reverse of array method is called here. randomNumber array is reused as the previous value is not needed anymore
+        System.out.print("Array reversed is => ");
+        displayArray(randomNumber);                                                        //integer array display method
       }
-      else
+      catch (InputMismatchException ex)                                       //exception handling for input mismatch
       {
-        System.out.println("The array doesn't contains " + userIntEntry + " :(");
+        entry.nextLine();                                                     //clearing input buffer when exceptions raised
+        System.out.println("Error!!!! Invalid entry. Please rerun the application to continue!!");
       }
-
-      randomNumber = reverseArray(randomNumber);                                         //reverse of array method is called here. randomNumber array is reused as the previous value is not needed anymore
-      System.out.print("Array reversed is => ");
-      displayArray(randomNumber);                                                        //integer array display method
-
 
       System.out.print("Do you want to run the application again? (Y/N): ");    //This is to take user's input if they want to rerun the application
       String userOpt = entry.next();
@@ -95,12 +101,8 @@ public class Lab2
       }
 
     }while(optRerun == 'Y');                                              //reRun the application if user chooses so
-  }
-  catch (InputMismatchException ex)                                       //exception handling for input mismatch
-  {
-    System.out.println("Invalid entry. Please rerun the application");
-  }
-  System.out.println("********Thank you. Application will close now.*********");        //Application closing message
+
+    System.out.println("********Thank you. Application will close now.*********");        //Application closing message
  }
 
 
@@ -112,19 +114,8 @@ public class Lab2
    String encryptedText = new String();                                //char to hold encrypted/decrypted string
    for (int index = 0; index < userEntry.length(); index++)            //Loop structure accommodates multiple String
    {
-     if (Character.isUpperCase(userEntry.charAt(index)))               //encryption/decryption for upper case
-     {
-       strPos = (char)(((int)userEntry.charAt(index) + cipher - 65) % 26 + 65);   //Caesar Cipher logic
-     }
-     else if ((Character.isLowerCase(userEntry.charAt(index))))       //encryption/decryption for lower case
-     {
-       strPos = (char)(((int)userEntry.charAt(index) + cipher - 97) % 26 + 97);   //Caesar Cipher logic
-     }
-     else
-     {
-       strPos = userEntry.charAt(index);                              //spaces and other characters are ignored - they are left as it is
-     }
-     encryptedText = encryptedText + strPos;                          //chars appended into string
+     strPos = (char)((int)userEntry.charAt(index) + cipher);          //encryption/decryption
+     encryptedText += strPos;                                         //chars appended into string
    }
    return encryptedText;                                              //returns encrypted/decrypted string
  }
@@ -152,16 +143,14 @@ public class Lab2
 
  public static boolean findingAnswers (int[] arrayVal, int findThisValue)   //method overloading - searching number
  {
-   boolean foundIt = false;                                                 //boolean marked true value found
    for (int index = 0; index < arrayVal.length; index++)                    //Loop structure accommodates multiple array
    {
-     if(arrayVal[index] == findThisValue)                                   //if value found, boolean is marked true and loop stopped
+     if(arrayVal[index] == findThisValue)                                   //if value found, boolean is marked true
      {
-       foundIt = true;
-       break;
+       return true;
      }
    }
-   return foundIt;                                                          //returns true/false
+   return false;                                                           //if value isn't there then false is returned
  }
 
  public static int[] reverseArray (int[] arrayVal)                      //method to reverse Array of random numbers
